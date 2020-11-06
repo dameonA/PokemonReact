@@ -5,9 +5,13 @@ function ViewAllList(props) {
         let url = `https://pokeres.bastionbot.org/images/pokemon/${index+1}.png`
         let imgTag =`${url}`
         return (
-            <li><img src={imgTag} alt=""></img></li>
+            <li>
+                <img onClick={() => props.onImageClick(entry.name)} src={imgTag} alt=""></img>
+            </li>
         );
     })
+
+//onChange={(event)=>props.onSetFilteredDate(event.target.value)}
 
     return (
         <div>

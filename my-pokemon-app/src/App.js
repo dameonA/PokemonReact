@@ -26,6 +26,12 @@ class App extends React.Component {
     this.setState({pokemonAll: json.results})
   }
 
+  handleImageClick = async (name) => {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    const json = await response.json()
+    this.setState({pokemon: json})
+  }
+
   componentDidMount = async () => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.state.searchBoxInput}`)
     const json = await response.json()
@@ -51,7 +57,9 @@ class App extends React.Component {
           onViewAll={this.handleViewAll}
           />
           <ViewAllList 
+          pokemon = {this.state.pokemon}
           pokemonList={this.state.pokemonAll}
+          onImageClick = {this.handleImageClick}
           />
       </div>
     );
