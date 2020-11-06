@@ -5,6 +5,8 @@ import SearchPokemon from './SearchPokemon'
 import PokemonDisplay from './PokemonDisplay'
 import ViewAll from './ViewAll'
 import ViewAllList from './ViewAllList'
+import ViewSimilarTypes from './ViewSimilarTypes'
+import SimilarTypesDisplay from './SimilarTypesDisplay'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,6 +15,7 @@ class App extends React.Component {
       pokemonAll: [],
       pokemon: {},
       searchBoxInput: "",
+      pokemonSimilar: {},
     }
   }
 
@@ -32,6 +35,17 @@ class App extends React.Component {
     this.setState({pokemon: json})
   }
 
+  handleViewSimilar = async () => {
+    this.componentDidMount();
+
+    let pokemon = this.state.pokemon
+    let pokemonTypeUrl = pokemon.types[0].type.url;
+
+    const response = await fetch(pokemonTypeUrl)
+    const json = await response.json()
+    this.setState({pokemonSimilar: json.results})
+  }
+
   componentDidMount = async () => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.state.searchBoxInput}`)
     const json = await response.json()
@@ -47,12 +61,22 @@ class App extends React.Component {
         <h2>Pokemon App</h2>
         <SearchPokemon 
           onSearchBoxChange={this.handleSearchBoxChange}
-          onSearchItem={this.componentDidMount}
-        
+          onSearchItem={this.componentDidMount}               
           />
+            <ViewSimilarTypes
+          // pokemon = {this.state.pokemon}
+          // pokemonList={this.state.pokemonAll}
+          onViewSimilar = {this.handleViewSimilar}
+          />
+
           <PokemonDisplay
           pokemon = {this.state.pokemon}
           /><br/>
+          <SimilarTypesDisplay
+          pokemonSimilar = {this.state.pokemonSimilar}
+          
+          />
+        
           <ViewAll
           onViewAll={this.handleViewAll}
           />
@@ -61,7 +85,9 @@ class App extends React.Component {
           pokemonList={this.state.pokemonAll}
           onImageClick = {this.handleImageClick}
           />
+          
       </div>
+    
     );
   }
   
@@ -84,3 +110,4 @@ export default App;
 //         }
 //         poke_input_arr.forEach(entry => read_pokemon_data(entry))
 
+//https://pokeapi.co/api/v2/type/{/
